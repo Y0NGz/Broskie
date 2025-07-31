@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Broskiee</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Comic Neue', cursive, sans-serif;
+    }
+
+    body {
+      background-color: #fffdf6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #5f5f5f;
+      touch-action: manipulation;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #ffc6c6;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      animation: fadeOut 1s forwards 2.5s;
+    }
+
+    .loader-animation {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #fffdf6;
+      animation: float 1.8s infinite ease-in-out;
+    }
+
+    .dot:nth-child(1) { animation-delay: 0.1s; }
+    .dot:nth-child(2) { animation-delay: 0.3s; }
+    .dot:nth-child(3) { animation-delay: 0.5s; }
+
+    .loader-text {
+      font-size: 24px;
+      color: #fffdf6;
+      text-align: center;
+      margin-top: 20px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #e5f9f5 0%, #cfefff 100%);
+      border-radius: 30px;
+      padding: 50px;
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      animation: fadeIn 1.5s ease-out forwards;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 30px;
+      justify-content: center;
+      min-height: 60vh;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: #ff85a2;
+      text-shadow: 2px 2px 0 #fffdf6;
+      animation: slideUp 0.8s ease-out forwards 0.3s;
+      opacity: 0;
+    }
+
+    .countdown {
+      font-size: 5rem;
+      color: #ff85a2;
+      margin: 10px 0 30px;
+      animation: pulse 1s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.1); }
+    }
+
+    .phrase {
+      font-size: 1.5rem;
+      margin: 20px 0;
+      color: #000;
+      opacity: 0;
+      display: none;
+      min-height: 100px;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: #ff85a2; }
+    }
+
+    .typing-effect {
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 2px solid #ff85a2;
+      animation:
+        typing 3.5s steps(40, end),
+        blink-caret .75s step-end infinite;
+    }
+
+    .button {
+      background-color: #ff85a2;
+      color: black;
+      border: none;
+      border-radius: 30px;
+      padding: 15px 30px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 20px 0;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .button:hover {
+      transform: scale(1.05);
+      background-color: #ffc6c6;
+    }
+
+    footer {
+      background-color: #ffc6c6;
+      color: white;
+      text-align: center;
+      padding: 30px 0;
+      border-radius: 25px;
+      margin-top: 40px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 25px 15px;
+        margin-bottom: 20px;
+      }
+
+      .hero-content {
+        padding: 20px 10px;
+        min-height: auto;
+      }
+
+      h1 {
+        font-size: 1.7rem;
+        margin-bottom: 10px;
+      }
+
+      .countdown {
+        font-size: 3rem;
+      }
+
+      .phrase {
+        font-size: 1rem;
+        min-height: 80px;
+        text-align: center;
+        padding: 10px;
+      }
+
+      .button, #musicToggle {
+        padding: 12px 20px;
+        font-size: 1rem;
+        min-width: unset;
+        width: 90%;
+        max-width: 300px;
+      }
+
+      .music-player {
+        bottom: 15px;
+        right: 10px;
+        left: 0;
+        justify-content: center;
+        width: 100%;
+      }
+
+      footer {
+        font-size: 0.9rem;
+        padding: 20px 10px;
+      }
+    }
+
+    .music-player {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #musicToggle {
+      background-color: #ff85a2;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 30px;
+      font-size: 1rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      min-width: 150px;
+      text-align: center;
+    }
+
+    #musicToggle:hover {
+      transform: scale(1.05);
+      background-color: #ff6b8b;
+    }
+  </style>
+</head>
+<body>
+  <div class="loader">
+    <div class="loader-animation">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+    <div class="loader-text">Loading Something Special for Red...</div>
+  </div>
+
+  <div class="container">
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Secret namin ni Red</h1>
+        <button id="startButton" class="button">Curious ka broo??</button>
+        <div class="countdown" id="countdown" style="display:none">27</div>
+        <div class="phrase" id="phrase"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Music Player -->
+  <div class="music-player">
+    <audio id="bgMusic" loop>
+      <source src="music.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+    <audio id="bgMusic2">
+      <source src="music2.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+    <button id="musicToggle" class="button">🎵 Play Music</button>
+  </div>
+
+  <script>
+    const music = document.getElementById('bgMusic');
+    const music2 = document.getElementById('bgMusic2');
+    const countdownElement = document.getElementById('countdown');
+    const phraseElement = document.getElementById('phrase');
+    const musicToggle = document.getElementById('musicToggle');
+    music.volume = 0.3;
+    music2.volume = 0.3;
+    let count = 27;
+
+    // When music1 ends, play music2
+    music.addEventListener('ended', () => {
+      music2.play().catch(e => console.log('Autoplay blocked for music2:', e));
+    });
+
+    musicToggle.addEventListener('click', () => {
+      music.play().catch(e => console.log('Autoplay blocked:', e));
+    });
+
+    document.getElementById('startButton').addEventListener('click', function() {
+      this.style.display = 'none';
+      countdownElement.style.display = 'block';
+      countdownElement.style.opacity = 1;
+
+      const timer = setInterval(() => {
+        count--;
+        countdownElement.textContent = count;
+        if (count <= 0) {
+          clearInterval(timer);
+          countdownElement.style.display = 'none';
+          phraseElement.style.display = 'block';
+          startPhrases();
+        }
+      }, 1000);
+
+      music.play().catch(e => console.log('Autoplay prevented:', e));
+    });
+
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        document.querySelector('.loader').style.display = 'none';
+      }, 500);
+    });
+
+    function startPhrases() {
+      const phrases = [
+        "Brooooo........ ",
+        "eto na yung sasabihin ko sayo.",
+        "Pero bawal i-screenshot ah HAHAHAHAHA.",
+        "Lately kasi lagi akong kinakausap ni Red.",
+        "Habang hinihintay kita sa tapat ng office nyo",
+        "bigla niyang bulong:",
+        "“Pre, bakit parang naka-smile ka??”",
+        "‘Wag mo sabihing kinikilig ka kay Brooo.” 😭🛵",
+        "At una, deny ako syempre.",
+        "Bestfriend tayo eh.",
+        "Partners in-crime.",
+        "Food buddy",
+        "Gala buddy",
+        "Passenger princess ko AHHHHH",
+        "Pero habang iniisip ko, narealize ko:",
+        "Oo nga, Bro.",
+        "Nahulog na ako.",
+        "Hindi sa motor",
+        "Hindi sa sahig katulad nung sa gateway HAHHAHA",
+        "alam mo saann???",
+        "sa’yo.😩💘",
+        "SHEEEEEttttttt HAHHAHAHA.",
+        "Bakit?",
+        "Ewan ko baaa.",
+        "Baka dahil nagkakasundo tayo sa jejemon playlist natin",
+        "O dahil sa Uncle John’s ice cream trip natin na bihira lang sa store.",
+        "Or yung barbecue siomai natin sa UP ",
+        "Or baka nung nilibre mo ako ng proben sa Molave na peyborit mo",
+        "Ang spontaneous natin eh noh HAHAHAHAHA",
+        "Tapos ayun, habang ikaw chill lang tulala dahil pagod sa work",
+        "Ako sa loob ng helmet: “Lord, Alam kong bestfriend lang kami… ",
+        "Pero bakit ganonn???",
+        "bakit ang comfortable niya kausap ",
+        "bakit we get along well without forcing things ?”",
+        "bakit I see you in my future?”",
+        "not as my bestfriend",
+        "But as my wifee",
+        "FFF HAHAHHAHA",
+        "I know Broooo",
+        "Ayaw mo muna ng jowa.",
+        "You’re figuring yourself out and I admire that.",
+        "Pogi, Maganda, Strong, Self-aware ka eh. At suportado kita dun.",
+        "Walang pilitan,",
+        "Walang pressure.",
+        "I just don't want to be dishonest with you",
+        "That is why I'm expressing myself",
+        "I really value our friendship",
+        "Pero gusto ko lang sabihin: kahit Bro ang tawagan natin… ",
+        "Hindi na pang Bro ang nararamdaman ko.",
+        "Di ako magmamadali.",
+        "I'm not expecting anything in return (pero kung meron why not char HAHAHA).",               
+        "Kahit sa ngayon, ride or chismis lang tayo,",
+        "Just remember",
+        "Nandito lang si broo.",
+        "Di ko man masabi palagi",
+        "pero ako’t si Red, naka-full tank na. 🛵🍢🍦💘",
+        "Waiting lang sa green light mo. 😌❤️"
+      ];
+
+      let currentPhraseIndex = 0;
+
+      function showNextPhrase() {
+        phraseElement.style.opacity = 0;
+        setTimeout(() => {
+          phraseElement.textContent = '';
+          phraseElement.style.opacity = 1;
+          phraseElement.classList.add('typing-effect');
+          let text = phrases[currentPhraseIndex];
+          let i = 0;
+          const typing = setInterval(() => {
+            if (i < text.length) {
+              phraseElement.textContent = text.substring(0, i + 1);
+              i++;
+            } else {
+              clearInterval(typing);
+              setTimeout(() => {
+                phraseElement.classList.remove('typing-effect');
+              }, 1000);
+              if (currentPhraseIndex < phrases.length - 1) {
+                currentPhraseIndex++;
+                setTimeout(showNextPhrase, 5000);
+              }
+            }
+          }, 50);
+        }, 300);
+      }
+
+      showNextPhrase();
+    }
+  </script>
+</body>
+</html>
